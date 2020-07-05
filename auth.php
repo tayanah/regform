@@ -1,6 +1,6 @@
 <?php 
 session_start();
-$conn  = new PDO("mysql:host=localhost;dbname=users", 'root', '');
+$conn  = new PDO("mysql:host=localhost;dbname=regform", 'root', '');
 if (!$conn) {
 	echo "failed to connect to the dabatase";
 }
@@ -13,23 +13,26 @@ if (isset($_POST['login'])) {
 	$email = cleaner($_POST['email']);
 	$pass = cleaner($_POST['password']);
 	if (!empty($email) && !empty($pass)) {
-		$login = $conn->prepare("SELECT * FROM `users` WHERE `email` = ?");
+		$login = $conn->prepare("SELECT * FROM `users` WHERE `email` = ? LIMIT 1");
 		$login->execute(array($email)); //getch the user record from the db
-		$row = $login->fetch(FETCH_ASSOC);
-		if ($add->rowCount() > 0) {
-			$encpass = password_hash($pass, PASSWORD_DEFAULT); //encripting the passoword
-			if ($row['password'] == $encpass) {
-				# passwords match you can redirect the user to another page
-				$_SESSION['email'] = $email;
-				header('location: logedinpage.somethings');
+		$row = $login->fetch(PDO::FETCH_ASSOC);
+		if ($login->rowCount() > 0) {
+			if (password_verify($pass, $row['password'])) {
+				$_SESSION['user'] = $row['userId'];
+				$_SESSION['name'] = $row['name'];
+				$_SESSION['email'] = $row['email'];
+				header('location: home.php');
 			}else{
-				echo "you have entered a wrong password";
+				$_SESSION['errors'] = 'Incorrect Password';
+				header('location: login.php');
 			}
 		}else{
-			echo "user not found on the database";
+			$_SESSION['errors'] = "User not found, click <a href='./'>Here</a> To register";
+			header('location: login.php');
 		}
 	}else{
-		echo "please fill in all the fields";
+		$_SESSION['errors'] = 'Please fill in all the details';
+		header('location: login.php');
 	}
 
 }
@@ -47,8 +50,8 @@ if (isset($_POST['signup'])) {
 		}
 		$password = password_hash($pass, PASSWORD_DEFAULT);
 
-		$add = $conn->prepare("INSERT INTO `users`  VALUES ?, ?, ? ");
-		if ($add->execute(array($name, $email, $pass))) {
+		$add = $conn->prepare("INSERT INTO `users` (`name`, `email`, `password`) VALUES (?, ?, ?) ");
+		if ($add->execute(array($name, $email, $password))) {
 			$_SESSION['message'] = 'Succesful signed up please login to continue';
 			header('location: login.php');
 		}else{
@@ -56,7 +59,8 @@ if (isset($_POST['signup'])) {
 			header('location: ./');
 		}
 	}else{
-		echo "please fill in all the fields";
+		$_SESSION['error'] = 'Please fill in all the fields';
+		header('location: ./');
 	}
 }
 ?>
