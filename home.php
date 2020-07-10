@@ -118,7 +118,7 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['email'])) {
     </div>
     <section id="home"></section>
     <div class="first-page container-fluid">
-      <h1 class="text-center profile-name"><?php echo $_SESSION['name']; ?>'s Profile</h1>
+      <h1 class="text-center profile-name"><?php echo $_SESSION['name']; ?>Loan Application</h1>
       <hr class="style-two">
       </hr>
       <div class="buttons text-center">
@@ -138,8 +138,39 @@ if (!isset($_SESSION['user']) || !isset($_SESSION['email'])) {
         <br></br>
         <div class="about">
           <span>
-            <h2>Welcome</h2>
-            <p>Greetings welcome to my login system you can now see your profile</p>
+            <h2>BUSINESS LOAN APPLICATION <br><h4>Personal information<h4></h2>
+            <p><h5>Name of Applicant<h5>
+             	Prefix<input type="text">
+            	First Name<input type="text">
+            	Middle Name<input type="text">
+            	Last Name<input type="text">
+            </p>
+            <p>
+            	E-mail of Applicant:
+            	<input type="email" class="form-input" name="email" id="email" placeholder="Your Email"/>
+            </p>
+            <p>Phone Number
+            	<input type="phone" class="form-input" name="phone" id="phone" placeholder="Your number"/>
+            </p>
+            <p>
+            	Valid number of applicant
+            	<input type="number" class="form-input" name="number" id="number" placeholder="Your Number"/>
+            </p>
+            <p>
+            	Fax number of Applicant
+            	<input type="number" class="form-input" name="number" id="number" placeholder="Your Number"/>
+            </p>
+            <p>
+            	<h5>Address of Applicant<h5>
+            </p>
+            <p>
+            	Street Address
+            	<input type="address" class="form-input" name="address" id="address"/>
+            </p>
+            <p>
+            	Street Address 1
+            	<input type="address" class="form-input" name="address" id="address"/>
+            </p>
           </span>
         </div>
       </div>
